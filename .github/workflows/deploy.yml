@@ -11,7 +11,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout🛎️
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           persist-credentials: false
@@ -30,16 +30,16 @@ jobs:
       - name: Clean for Chinese blog
         run: yarn --cwd "blog-source-chinese" clean
 
-      - name: Build for Chinese blog🔧
+      - name: Build for Chinese blog
         run: yarn --cwd "blog-source-chinese" build
 
       - name: Copy Chinese blog to deploy folder
         run: cp -r blog-source-chinese/public/. website-root/
 
-      - name: Deploy to GitHub Pages🚀
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.4.0
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           branch: main
           folder: website-root
-          repository-name: liuyubor/liuyubor.github.io
+          repository-name: kdrsi/kdrsi.github.io
