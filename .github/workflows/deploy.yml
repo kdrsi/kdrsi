@@ -1,0 +1,45 @@
+name: Deploy blog to GitHub Pages
+on: 
+  push:
+    branches:
+      - main
+    paths:
+      - 'website-root/**'
+      - 'blog-source-chinese/**'
+      - 'blog-source-english/**'
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout🛎️
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Setup yarn
+        run: npm install -g yarn
+
+      - name: Install packages for Chinese blog
+        run: yarn --cwd "blog-source-chinese"
+
+      - name: Clean for Chinese blog
+        run: yarn --cwd "blog-source-chinese" clean
+
+      - name: Build for Chinese blog🔧
+        run: yarn --cwd "blog-source-chinese" build
+
+      - name: Copy Chinese blog to deploy folder
+        run: cp -r blog-source-chinese/public/. website-root/
+
+      - name: Deploy to GitHub Pages🚀
+        uses: JamesIves/github-pages-deploy-action@v4.4.0
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          branch: main
+          folder: website-root
+          repository-name: liuyubor/liuyubor.github.io
